@@ -1,0 +1,22 @@
+server:
+  port: 7878
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/clone-linkedin?createDatabaseIfNotExist=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1cXrpZ38+Cw9dwanuGgZGWmJ/LPfPxAMld+s8Ek6G3Z3ir75tt5d6V+l5kHkNfCC/vQHyxQQul5IMpmXCwahtYVRfRUlITVYBxnwSAwtS80xtMxBdRTIS0zSD84QUJjBtMXyd9aQMom1oqcKPVQOl+EQNUValMfsCmUCW23MoRosR92UTHyhTmRz+FtoCfYuheeof9uC0HvZwXAIG+7kniWHpEF9/W96rNU6XbWVvcFTY47GeWjbmjVY8JYpso3eLTo0/6l5r3Kqee5oINrXiZqXSb6aPbYAcmYCb7CHSIz3SgM/+u7dCnV5DSZTKJ5MENqWJ3mC7EKFJ1cAsyEwGQIDAQAB
+  expiration-duration-sec: 300
+  refresh-expiration-duration-sec: 604800
