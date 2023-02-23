@@ -11,20 +11,17 @@ import org.mapstruct.factory.Mappers;
 /**
  * @author adil
  */
-@Mapper(componentModel = "spring", uses = CommentLikeMapper.class)
+@Mapper(componentModel = "spring", uses = ClientMapper.class)
 public interface CommentLikeMapper {
 
-    ClientMapper clientMapper = Mappers.getMapper(ClientMapper.class);
 
     @Mapping(source = "client.id", target = "userId")
     @Mapping(source = "comment.id", target = "commentId")
     CommentLikeDTO toCommentLikeDTO(CommentLike like);
 
+    @Mapping(source = "client", target = "client")
     CommentLikeResponseDTO toCLikeResponseDTO(CommentLike cLike);
 
-    @AfterMapping
-    default void setClientSummaryDTO(@MappingTarget CommentLikeResponseDTO cLikeResponseDTO, CommentLike cLike) {
-        cLikeResponseDTO.setClient(clientMapper.toClientSummaryDTO(cLike.getClient()));
-    }
+
 
 }

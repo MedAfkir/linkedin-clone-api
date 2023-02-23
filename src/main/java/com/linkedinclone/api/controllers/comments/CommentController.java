@@ -6,6 +6,9 @@ import com.linkedinclone.api.dto.likes.post.*;
 import com.linkedinclone.api.dto.posts.PostDTO;
 import com.linkedinclone.api.dto.clients.ClientDTO;
 import com.linkedinclone.api.exceptions.alreadyused.AlreadyLikedException;
+import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
+import com.linkedinclone.api.exceptions.notfound.CommentNotFoundException;
+import com.linkedinclone.api.exceptions.notfound.LikeNotFoundException;
 import com.linkedinclone.api.exceptions.notfound.NotFoundException;
 import com.linkedinclone.api.services.likes.CommentLikeService;
 import com.linkedinclone.api.services.comments.CommentService;
@@ -63,36 +66,35 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getCommentPost(id));
     }
 
+
+    /**
+     * @author adil
+     * @param likeDTO
+     * @return
+     */
     @PostMapping("/like")
-    public ResponseEntity<?> likeComment(@RequestBody CommentLikeCreateDTO likeDTO) {
-        try {
-            return ResponseEntity.ok(cLikeService.addCommentLike(likeDTO));
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (AlreadyLikedException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
+    public ResponseEntity<?> likeComment(@RequestBody CommentLikeCreateDTO likeDTO)
+            throws ClientNotFoundException, AlreadyLikedException, CommentNotFoundException {
+        return ResponseEntity.ok(cLikeService.addCommentLike(likeDTO));
     }
 
     @DeleteMapping("/like/{id}")
-    public ResponseEntity<?> deleteCommentLike(@PathVariable Long id){
-        try {
-            return ResponseEntity.ok(cLikeService.deletePLike(id));
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<?> deleteCommentLike(@PathVariable Long id) throws LikeNotFoundException {
+        return ResponseEntity.ok(cLikeService.deletePLike(id));
     }
 
     @PutMapping("/like/{id}")
     public ResponseEntity<?> updateCommentLike(
             @PathVariable Long id,
             @RequestBody PostLikeUpdateDTO likeDTO
-    ) {
-        try {
-            return ResponseEntity.ok(cLikeService.updateCommentLike(id, likeDTO));
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    ) throws LikeNotFoundException {
+        return ResponseEntity.ok(cLikeService.updateCommentLike(id, likeDTO));
+    }
+
+    @GetMapping("/{commentId}/likes")
+    public ResponseEntity<?> getAllLikesForComment(@PathVariable Long commentId)
+            throws CommentNotFoundException {
+        return ResponseEntity.ok(commentService.getAllLikesForComment(commentId));
     }
 
 }

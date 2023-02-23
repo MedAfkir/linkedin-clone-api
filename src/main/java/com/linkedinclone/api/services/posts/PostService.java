@@ -3,6 +3,8 @@ package com.linkedinclone.api.services.posts;
 import com.linkedinclone.api.dto.clients.ClientDTO;
 import com.linkedinclone.api.dto.clients.ClientMapper;
 import com.linkedinclone.api.dto.comments.CommentMapper;
+import com.linkedinclone.api.dto.likes.post.PostLikeMapper;
+import com.linkedinclone.api.dto.likes.post.PostLikeResponseDTO;
 import com.linkedinclone.api.dto.posts.*;
 import com.linkedinclone.api.dto.comments.CommentDTO;
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
@@ -28,6 +30,8 @@ public class PostService {
     private final PostMapper postMapper;
     private final CommentMapper commentMapper;
     private final ClientMapper clientMapper;
+
+    private final PostLikeMapper postLikeMapper;
 
     public List<PostSummaryDTO> getAll() {
         return postRepository
@@ -133,5 +137,21 @@ public class PostService {
     private void existsById(Long id) throws PostNotFoundException {
         if (!postRepository.existsById(id))
             throw new PostNotFoundException();
+    }
+
+
+    /**
+     * @author adil
+     * @param postId
+     * @return
+     * @throws PostNotFoundException
+     */
+    public List<PostLikeResponseDTO> getAllLikesForPost(Long postId)
+            throws PostNotFoundException {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+        return post.getLikes().stream()
+                .map(postLikeMapper::toPostLikeResponseDTO)
+                .toList();
     }
 }

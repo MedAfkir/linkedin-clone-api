@@ -5,6 +5,8 @@ import com.linkedinclone.api.dto.clients.ClientMapper;
 import com.linkedinclone.api.dto.comments.CommentDTO;
 import com.linkedinclone.api.dto.comments.CommentMapper;
 import com.linkedinclone.api.dto.comments.CommentSummaryDTO;
+import com.linkedinclone.api.dto.likes.comment.CommentLikeMapper;
+import com.linkedinclone.api.dto.likes.comment.CommentLikeResponseDTO;
 import com.linkedinclone.api.dto.posts.PostDTO;
 import com.linkedinclone.api.dto.posts.PostMapper;
 import com.linkedinclone.api.dto.posts.PostSummaryDTO;
@@ -33,6 +35,8 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final ClientMapper clientMapper;
     private final PostMapper postMapper;
+
+    private final CommentLikeMapper commentLikeMapper;
 
     /**
      * Get all comments
@@ -147,5 +151,21 @@ public class CommentService {
     private void ifNotExistsThrowException(Long id) throws CommentNotFoundException {
         if (!commentRepository.existsById(id))
             throw new CommentNotFoundException();
+    }
+
+    /**
+     * @author adil
+     * @param commentId
+     * @return
+     * @throws CommentNotFoundException
+     */
+    public List<CommentLikeResponseDTO> getAllLikesForComment(Long commentId)
+            throws CommentNotFoundException {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFoundException::new);
+
+        return comment.getLikes().stream()
+                .map(commentLikeMapper::toCLikeResponseDTO)
+                .toList();
     }
 }

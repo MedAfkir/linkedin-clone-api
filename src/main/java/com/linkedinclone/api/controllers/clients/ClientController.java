@@ -4,7 +4,11 @@ import com.linkedinclone.api.dto.clients.ClientDTO;
 import com.linkedinclone.api.dto.requests.RequestCreateDTO;
 import com.linkedinclone.api.dto.requests.RequestUpdateDTO;
 import com.linkedinclone.api.exceptions.alreadyused.AlreadyUsedException;
+import com.linkedinclone.api.exceptions.alreadyused.RequestAlreadyAcceptedException;
+import com.linkedinclone.api.exceptions.alreadyused.RequestAlreadySentException;
+import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
 import com.linkedinclone.api.exceptions.notfound.NotFoundException;
+import com.linkedinclone.api.exceptions.notfound.RequestNotFoundException;
 import com.linkedinclone.api.services.clients.ClientService;
 import com.linkedinclone.api.services.friendrequest.FriendRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,72 +104,78 @@ public class ClientController {
 
 
     @GetMapping("/{id}/followers")
-    public ResponseEntity<?> getClientFollowers(@PathVariable("id") Long id){
-       try {
-           return ResponseEntity.ok(friendRequestService.getFollowers(id));
-       }catch (NotFoundException e){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-       }
+    public ResponseEntity<?> getClientFollowers(@PathVariable("id") Long id)
+            throws ClientNotFoundException {
+        return ResponseEntity.ok(friendRequestService.getFollowers(id));
     }
 
     @GetMapping("/{id}/followings")
-    public ResponseEntity<?> getClientFollowings(@PathVariable("id") Long id){
-       try {
-           return ResponseEntity.ok(friendRequestService.getFollowings(id));
-       }catch (NotFoundException e){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-       }
+    public ResponseEntity<?> getClientFollowings(@PathVariable("id") Long id) throws ClientNotFoundException {
+        return ResponseEntity.ok(friendRequestService.getFollowings(id));
     }
 
 
+    /**
+     * get all the friend requests
+     * @param id
+     * @return
+     * @throws ClientNotFoundException
+     */
     @GetMapping("/{id}/requests")
-    public ResponseEntity<?> getRequests(@PathVariable("id") Long id) {
-        try {
-            return ResponseEntity.ok(friendRequestService.getRequests(id));
-        }catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<?> getRequests(@PathVariable("id") Long id)
+            throws ClientNotFoundException {
+        return ResponseEntity.ok(friendRequestService.getRequests(id));
     }
 
+    /**
+     * get all the requests that the user send but not accepted yet
+     * @param id
+     * @return
+     * @throws ClientNotFoundException
+     */
     @GetMapping("/{id}/pending-requests")
-    public ResponseEntity<?> getPendingRequests(@PathVariable("id") Long id){
-        try {
-            return ResponseEntity.ok(friendRequestService.getSentRequests(id));
-        }catch (NotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<?> getPendingRequests(@PathVariable("id") Long id)
+            throws ClientNotFoundException {
+        return ResponseEntity.ok(friendRequestService.getSentRequests(id));
     }
 
+    /**
+     * send friend request to a user (request body contains id of the sender and the id
+     * of the receiver
+     * @param request
+     * @return
+     * @throws ClientNotFoundException
+     * @throws RequestAlreadySentException
+     */
     @PostMapping("/request")
-    public ResponseEntity<?> createRequest(@RequestBody RequestCreateDTO request) {
-        try {
-            return ResponseEntity.ok(friendRequestService.createRequest(request));
-
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (AlreadyUsedException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
+    public ResponseEntity<?> createRequest(@RequestBody RequestCreateDTO request)
+            throws ClientNotFoundException, RequestAlreadySentException {
+        return ResponseEntity.ok(friendRequestService.createRequest(request));
     }
 
+    /**
+     * update the friend the request
+     * @param requestDTO
+     * @return
+     * @throws RequestAlreadyAcceptedException
+     * @throws RequestNotFoundException
+     */
     @PutMapping("/request")
-    public ResponseEntity<?> updateRequest(@RequestBody RequestUpdateDTO requestDTO) {
-        try {
-            return ResponseEntity.ok(friendRequestService.updateRequest(requestDTO));
-        } catch (AlreadyUsedException e) {
-           return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<?> updateRequest(@RequestBody RequestUpdateDTO requestDTO)
+            throws RequestAlreadyAcceptedException, RequestNotFoundException {
+        return ResponseEntity.ok(friendRequestService.updateRequest(requestDTO));
     }
 
+    /**
+     * remove friend request
+     * @param id
+     * @return
+     * @throws RequestNotFoundException
+     */
     @DeleteMapping("/request/{id}")
-    public ResponseEntity<?> removeRequest(@PathVariable("id") Long id) {
-        try {
-            return ResponseEntity.ok(friendRequestService.removeRequest(id));
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<?> removeRequest(@PathVariable("id") Long id)
+            throws RequestNotFoundException {
+        return ResponseEntity.ok(friendRequestService.removeRequest(id));
     }
 
 

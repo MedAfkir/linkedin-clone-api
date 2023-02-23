@@ -119,12 +119,9 @@ public class FriendRequestService {
      * @throws RequestAlreadyAcceptedException
      */
     public RequestDTO updateRequest(RequestUpdateDTO requestDTO)
-            throws RequestNotFoundException, RequestAlreadyAcceptedException {
+            throws RequestNotFoundException {
         Request request = requestRepository.findById(requestDTO.getRequestId())
                 .orElseThrow(RequestNotFoundException::new);
-
-        if(request.getState().isAccepted())
-            throw new RequestAlreadyAcceptedException();
 
         request.setState(requestDTO.getRequestState());
         if(requestDTO.getRequestState().isAccepted()) request.setAcceptedAt(new Date());
