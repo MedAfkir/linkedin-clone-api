@@ -1,2 +1,7 @@
-package com.linkedinclone.api.models.experiences;public class ExperienceAction {
+package com.linkedinclone.api.models.experiences;
+
+public enum ExperienceAction {
+    CREATE,
+    UPDATE,
+    DELETE
 }

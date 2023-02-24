@@ -1,2 +1,5 @@
-package com.linkedinclone.api.models.posts;public enum PostAction {
+package com.linkedinclone.api.models.posts;
+
+public enum PostAction {
+    CREATE
 }
