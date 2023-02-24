@@ -17,5 +17,4 @@ public enum RequestState {
         return this.equals(ACCEPTED);
     }
 
-
 }

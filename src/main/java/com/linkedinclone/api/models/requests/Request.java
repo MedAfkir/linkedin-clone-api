@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @Builder
 public class Request {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,14 +30,12 @@ public class Request {
     @Enumerated(EnumType.STRING)
     private RequestState state;
 
-    @Column(name = "sent_at")
+    @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sentAt;
 
-    @Column(name = "accepted_at")
+    @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date acceptedAt;
-
-
 
 }

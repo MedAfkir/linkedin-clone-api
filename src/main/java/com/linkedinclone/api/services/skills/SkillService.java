@@ -2,10 +2,7 @@ package com.linkedinclone.api.services.skills;
 
 import com.linkedinclone.api.dto.clients.ClientDTO;
 import com.linkedinclone.api.dto.clients.ClientMapper;
-import com.linkedinclone.api.dto.skills.SkillAddRequest;
-import com.linkedinclone.api.dto.skills.SkillDTO;
-import com.linkedinclone.api.dto.skills.SkillMapper;
-import com.linkedinclone.api.dto.skills.SkillUpdateRequest;
+import com.linkedinclone.api.dto.skills.*;
 import com.linkedinclone.api.exceptions.notfound.SkillNotFoundException;
 import com.linkedinclone.api.models.clients.*;
 import com.linkedinclone.api.models.skills.*;
