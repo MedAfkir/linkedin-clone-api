@@ -15,6 +15,7 @@ import com.linkedinclone.api.models.likes.post.PostLike;
 import com.linkedinclone.api.models.posts.*;
 import com.linkedinclone.api.models.clients.*;
 import com.linkedinclone.api.models.comments.*;
+import com.linkedinclone.api.models.skills.Skill;
 import com.linkedinclone.api.services.friendrequest.FriendRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,5 +218,34 @@ public class PostService {
             sortedLikeTypes.add(entry.getKey());
         }
         return sortedLikeTypes;
+    }
+
+
+    /**
+     * get posts based on user's skills
+     * @param clientId
+     * @param page
+     * @param size
+     * @return
+     * @throws ClientNotFoundException
+     */
+    public List<PostSimpleResponseDTO> getSuggestedPost(Long clientId, int page, int size)
+            throws ClientNotFoundException {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(ClientNotFoundException::new);
+        List<String> skillsLabel = client.getSkills().stream()
+                .map(Skill::getLabel)
+                .toList();
+        PageRequest pageRequest = PageRequest.of(
+                page,size, Sort.by("createdAt").descending());
+        List<Post> posts = postRepository.findByClientSkillsLabelIn(skillsLabel, pageRequest);
+        return posts.stream()
+                .map(post -> {
+                    PostSimpleResponseDTO responseDTO =
+                            postMapper.toPostSimpleResponseDTO(post);
+                    responseDTO.setLikeTypes(getSortedLikeTypes(post));
+                    return responseDTO;
+                })
+                .toList();
     }
 }

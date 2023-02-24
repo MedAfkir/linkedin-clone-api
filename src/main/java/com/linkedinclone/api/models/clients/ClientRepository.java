@@ -1,8 +1,12 @@
 package com.linkedinclone.api.models.clients;
 
+import com.linkedinclone.api.models.posts.Post;
+import com.linkedinclone.api.models.skills.Skill;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +21,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByEmail(String email);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
+
+
 }
