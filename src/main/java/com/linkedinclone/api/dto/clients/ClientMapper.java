@@ -21,6 +21,9 @@ public interface ClientMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "experiences", ignore = true)
     @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "postLikes", ignore = true)
+    @Mapping(target = "commentLikes", ignore = true)
+    @Mapping(target = "privateAccount", ignore = true)
     @Mapping(target = "updatedAt", expression = "java(new java.util.Date())")
     Client updateClient(UserUpdateRequest request, @MappingTarget Client client);
 
@@ -33,5 +36,8 @@ public interface ClientMapper {
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "postLikes", ignore = true)
+    @Mapping(target = "commentLikes", ignore = true)
+    @Mapping(target = "privateAccount", ignore = true)
     Client createClient(UserRegistrationRequest request);
 }

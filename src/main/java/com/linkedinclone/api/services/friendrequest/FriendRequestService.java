@@ -59,6 +59,17 @@ public class FriendRequestService {
                 .toList();
     }
 
+    public List<Client> getFollowingsList(Long userId) throws ClientNotFoundException {
+        Client user = clientRepository.findById(userId)
+                .orElseThrow(ClientNotFoundException::new);
+
+        return requestRepository.
+                findBySenderAndState(user, RequestState.ACCEPTED)
+                .stream()
+                .map(Request::getReceiver)
+                .toList();
+    }
+
     /**
      * get follow requests (friend requests)
      * @param userId

@@ -48,11 +48,11 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<PostLike> pLikes;
+    private List<PostLike> postLikes;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<CommentLike> cLikes;
+    private List<CommentLike> commentLikes;
 
     private boolean privateAccount = false;
 
