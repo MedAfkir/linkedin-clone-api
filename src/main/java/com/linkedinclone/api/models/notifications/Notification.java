@@ -1,22 +1,21 @@
 package com.linkedinclone.api.models.notifications;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.linkedinclone.api.models.ActionType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public abstract class Notification<T, S> implements NotificationType<T, S> {
+public abstract class Notification<T, S extends ActionType> implements NotificationType<T, S> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +24,8 @@ public abstract class Notification<T, S> implements NotificationType<T, S> {
     private Date createdAt;
 
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "notification")
+    private List<UserNotificationState> userNotificationStates;
 
 }

@@ -1,7 +1,9 @@
-package com.linkedinclone.api.models.notifications;
+package com.linkedinclone.api.models.notifications.skill;
 
+import com.linkedinclone.api.models.notifications.Notification;
 import com.linkedinclone.api.models.skills.Skill;
 import com.linkedinclone.api.models.skills.SkillAction;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +21,7 @@ public class SkillNotification extends Notification<Skill, SkillAction> {
     @JoinColumn(name = "skill_id")
     private Skill payload;
 
+    @Embedded
     private SkillAction action;
 
 }

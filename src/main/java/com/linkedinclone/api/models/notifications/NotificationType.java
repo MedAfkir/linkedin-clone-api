@@ -1,6 +1,8 @@
 package com.linkedinclone.api.models.notifications;
 
-public interface NotificationType<T, S> {
+import com.linkedinclone.api.models.ActionType;
+
+public interface NotificationType<T, S extends ActionType> {
 
     T getPayload();
     void setPayload(T payload);

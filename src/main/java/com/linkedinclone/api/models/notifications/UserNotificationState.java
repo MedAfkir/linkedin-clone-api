@@ -2,26 +2,29 @@ package com.linkedinclone.api.models.notifications;
 
 import com.linkedinclone.api.models.users.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class NotificationState {
+public class UserNotificationState {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Notification notification;
+    @JoinColumn(name = "notification_id", nullable = false)
+    private Notification<?, ?> notification;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column
+    private boolean read;
 
 }

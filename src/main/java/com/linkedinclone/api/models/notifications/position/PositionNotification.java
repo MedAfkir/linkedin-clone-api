@@ -1,5 +1,6 @@
-package com.linkedinclone.api.models.notifications;
+package com.linkedinclone.api.models.notifications.position;
 
+import com.linkedinclone.api.models.notifications.Notification;
 import com.linkedinclone.api.models.positions.Position;
 import com.linkedinclone.api.models.positions.PositionAction;
 import jakarta.persistence.Entity;

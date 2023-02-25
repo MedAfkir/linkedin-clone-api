@@ -1,7 +1,8 @@
-package com.linkedinclone.api.models.notifications;
+package com.linkedinclone.api.models.notifications.experience;
 
 import com.linkedinclone.api.models.experiences.Experience;
 import com.linkedinclone.api.models.experiences.ExperienceAction;
+import com.linkedinclone.api.models.notifications.Notification;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
