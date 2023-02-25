@@ -1,6 +1,8 @@
 package com.linkedinclone.api.models.admins;
 
-public enum AdminAction {
+import com.linkedinclone.api.models.ActionType;
+
+public enum AdminAction implements ActionType {
     CREATE,
     UPDATE,
     DELETE,
