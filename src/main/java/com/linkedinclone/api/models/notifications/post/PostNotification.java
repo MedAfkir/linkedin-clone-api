@@ -2,6 +2,7 @@ package com.linkedinclone.api.models.notifications;
 
 import com.linkedinclone.api.models.posts.Post;
 import com.linkedinclone.api.models.posts.PostAction;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -11,6 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class PostNotification extends Notification<Post, PostAction> {
 
     @ManyToOne

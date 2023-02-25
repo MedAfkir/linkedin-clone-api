@@ -2,6 +2,7 @@ package com.linkedinclone.api.models.notifications;
 
 import com.linkedinclone.api.models.admins.Admin;
 import com.linkedinclone.api.models.admins.AdminAction;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -11,6 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class AdminNotification extends Notification<Admin, AdminAction> {
 
     @ManyToOne

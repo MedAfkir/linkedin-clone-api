@@ -2,6 +2,7 @@ package com.linkedinclone.api.models.notifications;
 
 import com.linkedinclone.api.models.positions.Position;
 import com.linkedinclone.api.models.positions.PositionAction;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -11,6 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class PositionNotification extends Notification<Position, PositionAction> {
 
     @ManyToOne

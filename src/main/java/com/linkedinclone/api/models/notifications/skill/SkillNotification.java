@@ -2,6 +2,7 @@ package com.linkedinclone.api.models.notifications;
 
 import com.linkedinclone.api.models.skills.Skill;
 import com.linkedinclone.api.models.skills.SkillAction;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -11,6 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class SkillNotification extends Notification<Skill, SkillAction> {
 
     @ManyToOne
