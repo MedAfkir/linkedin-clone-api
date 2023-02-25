@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### FIREBASE ADMIN SDK ###
+firebase-adminsdk.json
