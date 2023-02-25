@@ -1,6 +1,8 @@
 package com.linkedinclone.api.models.positions;
 
-public enum PositionAction {
+import com.linkedinclone.api.models.ActionType;
+
+public enum PositionAction implements ActionType {
     CREATE,
     UPDATE,
     DELETE,

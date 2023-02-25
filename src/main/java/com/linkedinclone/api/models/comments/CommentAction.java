@@ -1,6 +1,8 @@
 package com.linkedinclone.api.models.comments;
 
-public enum CommentAction {
+import com.linkedinclone.api.models.ActionType;
+
+public enum CommentAction implements ActionType {
     CREATE,
     UPDATE,
     DELETE

@@ -1,7 +1,9 @@
 package com.linkedinclone.api.models.likes;
 
-public enum LikeAction {
+import com.linkedinclone.api.models.ActionType;
+
+public enum LikeAction implements ActionType {
     CREATE,
-    UPDATE,
-    DELETE
+    UPDATE_TYPE,
+    REMOVE
 }

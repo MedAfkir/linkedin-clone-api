@@ -1,2 +1,4 @@
-package com.linkedinclone.api.models;public interface ActionType {
+package com.linkedinclone.api.models;
+
+public interface ActionType {
 }

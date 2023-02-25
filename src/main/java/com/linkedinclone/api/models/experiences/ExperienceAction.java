@@ -1,6 +1,8 @@
 package com.linkedinclone.api.models.experiences;
 
-public enum ExperienceAction {
+import com.linkedinclone.api.models.ActionType;
+
+public enum ExperienceAction implements ActionType {
     CREATE,
     UPDATE,
     DELETE

@@ -7,12 +7,10 @@ import com.linkedinclone.api.dto.posts.PostSummaryDTO;
 import com.linkedinclone.api.exceptions.alreadyused.AlreadyLikedException;
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
 import com.linkedinclone.api.exceptions.notfound.LikeNotFoundException;
-import com.linkedinclone.api.exceptions.notfound.NotFoundException;
 import com.linkedinclone.api.exceptions.notfound.PostNotFoundException;
 import com.linkedinclone.api.services.likes.PostLikeService;
 import com.linkedinclone.api.services.posts.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,43 +36,41 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addPost(@RequestBody PostRequest request) {
-        try {
-            return ResponseEntity.ok(postService.add(request));
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<?> addPost(
+            @RequestBody PostRequest request
+    ) throws ClientNotFoundException, PostNotFoundException {
+        return ResponseEntity.ok(postService.createPost(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable("id") Long id, @RequestBody PostRequest request) {
-        try {
-            return ResponseEntity.ok(postService.updatePost(id, request));
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> updatePost(
+            @PathVariable("id") Long id,
+            @RequestBody PostRequest request
+    ) throws ClientNotFoundException, PostNotFoundException {
+        return ResponseEntity.ok(postService.updatePost(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable("id") Long id) {
-        try {
-            postService.deleteById(id);
-            return ResponseEntity.ok().body(null);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> deletePost(
+            @PathVariable("id") Long id
+    ) throws PostNotFoundException {
+        postService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<?> getPostComments(@PathVariable("id") Long id) throws PostNotFoundException {
+    public ResponseEntity<?> getPostComments(
+            @PathVariable("id") Long id
+    ) throws PostNotFoundException {
         return ResponseEntity.ok(postService.getPostComments(id));
     }
 
     @GetMapping("/{id}/client")
-    public ResponseEntity<?> getPostClient(@PathVariable("id") Long id) throws PostNotFoundException {
+    public ResponseEntity<?> getPostClient(
+            @PathVariable("id") Long id
+    ) throws PostNotFoundException {
         return ResponseEntity.ok(postService.getPostClient(id));
     }
-
 
     /**
      * @author adil
@@ -82,11 +78,11 @@ public class PostController {
      * @return
      */
     @PostMapping("/like")
-    public ResponseEntity<?> likePost(@RequestBody PostLikeCreateDTO likeDTO)
-            throws ClientNotFoundException, AlreadyLikedException, PostNotFoundException {
+    public ResponseEntity<?> likePost(
+            @RequestBody PostLikeCreateDTO likeDTO
+    ) throws ClientNotFoundException, AlreadyLikedException, PostNotFoundException {
         return ResponseEntity.ok(pLikeService.addPostLike(likeDTO));
     }
-
 
     /**
      * @author adil
@@ -94,8 +90,9 @@ public class PostController {
      * @return
      */
     @DeleteMapping("/like/{id}")
-    public ResponseEntity<?> deletePostLike(@PathVariable Long id)
-            throws LikeNotFoundException {
+    public ResponseEntity<?> deletePostLike(
+            @PathVariable Long id
+    ) throws LikeNotFoundException {
         return ResponseEntity.ok(pLikeService.deletePostLike(id));
     }
 
@@ -113,7 +110,6 @@ public class PostController {
         return ResponseEntity.ok(pLikeService.updatePostLike(id, likeDTO));
     }
 
-
     /**
      * @author adil
      * @param postId
@@ -121,8 +117,9 @@ public class PostController {
      * @throws PostNotFoundException
      */
     @GetMapping("/{postId}/likes")
-    public ResponseEntity<?> getAllLikesForPost(@PathVariable Long postId)
-            throws PostNotFoundException {
+    public ResponseEntity<?> getAllLikesForPost(
+            @PathVariable Long postId
+    ) throws PostNotFoundException {
         return ResponseEntity.ok(postService.getAllLikesForPost(postId));
     }
 

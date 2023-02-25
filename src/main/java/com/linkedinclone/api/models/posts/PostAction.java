@@ -1,5 +1,9 @@
 package com.linkedinclone.api.models.posts;
 
-public enum PostAction {
-    CREATE
+import com.linkedinclone.api.models.ActionType;
+
+public enum PostAction implements ActionType {
+    CREATE,
+    UPDATE,
+    DELETE
 }
