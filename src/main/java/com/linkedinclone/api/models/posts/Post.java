@@ -3,6 +3,7 @@ package com.linkedinclone.api.models.posts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.linkedinclone.api.models.clients.Client;
 import com.linkedinclone.api.models.comments.Comment;
+import com.linkedinclone.api.models.images.Image;
 import com.linkedinclone.api.models.likes.post.PostLike;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,4 +41,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Collection<PostLike> likes;
+
+    @OneToMany
+    private Collection<Image> images;
 }

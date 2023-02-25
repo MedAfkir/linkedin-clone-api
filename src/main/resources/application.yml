@@ -20,3 +20,9 @@ jwt:
   secret: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1cXrpZ38+Cw9dwanuGgZGWmJ/LPfPxAMld+s8Ek6G3Z3ir75tt5d6V+l5kHkNfCC/vQHyxQQul5IMpmXCwahtYVRfRUlITVYBxnwSAwtS80xtMxBdRTIS0zSD84QUJjBtMXyd9aQMom1oqcKPVQOl+EQNUValMfsCmUCW23MoRosR92UTHyhTmRz+FtoCfYuheeof9uC0HvZwXAIG+7kniWHpEF9/W96rNU6XbWVvcFTY47GeWjbmjVY8JYpso3eLTo0/6l5r3Kqee5oINrXiZqXSb6aPbYAcmYCb7CHSIz3SgM/+u7dCnV5DSZTKJ5MENqWJ3mC7EKFJ1cAsyEwGQIDAQAB
   expiration-duration-sec: 300
   refresh-expiration-duration-sec: 604800
+
+
+firebase:
+  serviceAccountKeyPath: ./firebase-adminsdk.json
+  bucket: dev-storage-43872.appspot.com
+

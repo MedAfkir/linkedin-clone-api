@@ -2,6 +2,7 @@ package com.linkedinclone.api.models.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.linkedinclone.api.models.images.Image;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,6 +51,9 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;
+
+    @OneToOne
+    private Image image;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

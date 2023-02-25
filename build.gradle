@@ -28,6 +28,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    implementation 'com.google.firebase:firebase-admin:8.0.0'
 }
 
 tasks.named('test') {

@@ -10,15 +10,22 @@ import com.linkedinclone.api.dto.experiences.*;
 import com.linkedinclone.api.exceptions.alreadyused.*;
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
 import com.linkedinclone.api.models.experiences.*;
+import com.linkedinclone.api.models.images.Image;
+import com.linkedinclone.api.models.images.ImageRepository;
 import com.linkedinclone.api.models.positions.*;
 import com.linkedinclone.api.models.comments.*;
 import com.linkedinclone.api.models.clients.*;
 import com.linkedinclone.api.models.skills.*;
 import com.linkedinclone.api.models.posts.*;
+import com.linkedinclone.api.services.images.ImageService;
+import com.linkedinclone.api.services.images.ImageUploadListener;
+import com.linkedinclone.api.utils.FilesUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +47,9 @@ public class ClientService {
     private final PostRepository postRepository;
     private final PositionRepository positionRepository;
     private final CommentRepository commentsRepository;
+    private final ImageService imageService;
+
+    private final ImageRepository imageRepository;
 
     public List<ClientDTO> getAllClients() {
         return clientRepository.findAll()
@@ -128,5 +138,59 @@ public class ClientService {
     private void clientExistsById(Long id) throws ClientNotFoundException {
         if (!clientRepository.existsById(id))
             throw new ClientNotFoundException();
+    }
+
+    private void uploadProfilePicture(
+            Long clientId,
+            MultipartFile multipartFile,
+            final ImageUploadListener listener
+            ) throws ClientNotFoundException, IOException {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(ClientNotFoundException::new);
+        String name = FilesUtils.generateName();
+        String url = imageService.uploadImage(
+                FilesUtils.convertToFile(multipartFile),
+                name
+        );
+        Image image = Image.builder()
+                .name(name)
+                .url(url)
+                .build();
+        imageRepository.save(image);
+        client.setImage(image);
+        clientRepository.save(client);
+        listener.onSuccess(true);
+    }
+
+    public void updateProfilePicture(
+            Long clientId,
+            MultipartFile multipartFile,
+            final ImageUploadListener listener
+        ) throws ClientNotFoundException, IOException {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(ClientNotFoundException::new);
+        Image image = client.getImage();
+        if(image == null) {
+            listener.onSuccess(false);
+            return;
+        }
+        imageService.updateImage(
+                FilesUtils.convertToFile(multipartFile),
+                image.getName()
+        );
+        listener.onSuccess(true);
+    }
+
+    public void deleteProfilePicture(Long clientId, final ImageUploadListener listener)
+            throws ClientNotFoundException {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(ClientNotFoundException::new);
+        Image image = client.getImage();
+        if(image == null) {
+            listener.onSuccess(false);
+            return;
+        }
+        imageService.deleteImage(image.getName());
+        listener.onSuccess(true);
     }
 }

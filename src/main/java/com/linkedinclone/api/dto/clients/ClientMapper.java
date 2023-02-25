@@ -9,7 +9,9 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ClientMapper {
+    @Mapping(target = "imageUrl", source = "image.url")
     ClientDTO toClientDTO(Client client);
+    @Mapping(target = "imageUrl", source = "image.url")
     ClientSummaryDTO toClientSummaryDTO(Client client);
 
     @Mapping(target = "id", ignore = true)
@@ -24,6 +26,7 @@ public interface ClientMapper {
     @Mapping(target = "postLikes", ignore = true)
     @Mapping(target = "commentLikes", ignore = true)
     @Mapping(target = "privateAccount", ignore = true)
+    @Mapping(target = "image", ignore = true)
     @Mapping(target = "updatedAt", expression = "java(new java.util.Date())")
     Client updateClient(UserUpdateRequest request, @MappingTarget Client client);
 
@@ -39,5 +42,6 @@ public interface ClientMapper {
     @Mapping(target = "postLikes", ignore = true)
     @Mapping(target = "commentLikes", ignore = true)
     @Mapping(target = "privateAccount", ignore = true)
+    @Mapping(target = "image", ignore = true)
     Client createClient(UserRegistrationRequest request);
 }

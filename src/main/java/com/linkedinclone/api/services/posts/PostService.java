@@ -10,6 +10,8 @@ import com.linkedinclone.api.dto.posts.*;
 import com.linkedinclone.api.dto.comments.CommentDTO;
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
 import com.linkedinclone.api.exceptions.notfound.PostNotFoundException;
+import com.linkedinclone.api.models.images.Image;
+import com.linkedinclone.api.models.images.ImageRepository;
 import com.linkedinclone.api.models.likes.LikeType;
 import com.linkedinclone.api.models.likes.post.PostLike;
 import com.linkedinclone.api.models.posts.*;
@@ -17,11 +19,17 @@ import com.linkedinclone.api.models.clients.*;
 import com.linkedinclone.api.models.comments.*;
 import com.linkedinclone.api.models.skills.Skill;
 import com.linkedinclone.api.services.friendrequest.FriendRequestService;
+import com.linkedinclone.api.services.images.ImageService;
+import com.linkedinclone.api.services.images.ImageUploadListener;
+import com.linkedinclone.api.utils.FilesUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -40,6 +48,10 @@ public class PostService {
 
     private final FriendRequestService friendRequestService;
 
+    private final ImageService imageService;
+
+    private final ImageRepository imageRepository;
+
     public List<PostSummaryDTO> getAll() {
         return postRepository
                 .findAll()
@@ -50,6 +62,7 @@ public class PostService {
 
     /**
      * Get Post by ID
+     *
      * @param id Id of post
      * @return Post
      * @throws PostNotFoundException Post not Found
@@ -60,9 +73,10 @@ public class PostService {
 
     /**
      * Add a new post
+     *
      * @param request Post Request Body
      * @return Post added
-     * @throws PostNotFoundException Post not found
+     * @throws PostNotFoundException   Post not found
      * @throws ClientNotFoundException Client not found
      */
     public PostDTO createPost(PostRequest request) throws PostNotFoundException, ClientNotFoundException {
@@ -80,10 +94,11 @@ public class PostService {
 
     /**
      * Update a post
-     * @param id Id of post that will be updated
+     *
+     * @param id      Id of post that will be updated
      * @param request details to update
      * @return Post updated
-     * @throws PostNotFoundException Post not found
+     * @throws PostNotFoundException   Post not found
      * @throws ClientNotFoundException Client not found
      */
     public PostDTO updatePost(Long id, PostRequest request) throws PostNotFoundException, ClientNotFoundException {
@@ -103,6 +118,7 @@ public class PostService {
 
     /**
      * Delete a post by its ID
+     *
      * @param id Id of post that will be deleted
      * @throws PostNotFoundException Post Not Found
      */
@@ -113,6 +129,7 @@ public class PostService {
 
     /**
      * Get post comments
+     *
      * @param id Id of post whose comments will be fetched
      * @return List of post comments
      * @throws PostNotFoundException Post Not Found
@@ -128,6 +145,7 @@ public class PostService {
 
     /**
      * Get post owner ({@link Client})
+     *
      * @param id Id of post whose comments will be fetched
      * @return List of post comments
      * @throws PostNotFoundException Post Not Found
@@ -148,10 +166,10 @@ public class PostService {
 
 
     /**
-     * @author adil
      * @param postId
      * @return
      * @throws PostNotFoundException
+     * @author adil
      */
     public List<PostLikeResponseDTO> getAllLikesForPost(Long postId)
             throws PostNotFoundException {
@@ -165,9 +183,10 @@ public class PostService {
 
     /**
      * get a fixed size of friends's posts
+     *
      * @param clientId id of the user that he asks for posts
-     * @param page page number
-     * @param size size of the page
+     * @param page     page number
+     * @param size     size of the page
      * @return
      */
     public List<PostResponseDTO> getPostsOfFollowings(Long clientId, int page, int size)
@@ -184,7 +203,7 @@ public class PostService {
                     followings.stream()
                             .map(clientMapper::toClientSummaryDTO)
                             .toList()
-                    ));
+            ));
             postResponseDTO.setLikeTypes(getSortedLikeTypes(post));
 
             postResponseDTOS.add(postResponseDTO);
@@ -202,9 +221,9 @@ public class PostService {
 
     }
 
-    private List<LikeType> getSortedLikeTypes(Post post){
+    private List<LikeType> getSortedLikeTypes(Post post) {
         Map<LikeType, Integer> likeCounts = new HashMap<>();
-        for(PostLike like : post.getLikes()) {
+        for (PostLike like : post.getLikes()) {
             LikeType likeType = like.getType();
             likeCounts.put(likeType, likeCounts.getOrDefault(likeType, 0) + 1);
         }
@@ -219,6 +238,7 @@ public class PostService {
 
     /**
      * get posts based on user's skills
+     *
      * @param clientId
      * @param page
      * @param size
@@ -233,7 +253,7 @@ public class PostService {
                 .map(Skill::getLabel)
                 .toList();
         PageRequest pageRequest = PageRequest.of(
-                page,size, Sort.by("createdAt").descending());
+                page, size, Sort.by("createdAt").descending());
         List<Post> posts = postRepository.findByClientSkillsLabelIn(skillsLabel, pageRequest);
         return posts.stream()
                 .map(post -> {
@@ -244,4 +264,53 @@ public class PostService {
                 })
                 .toList();
     }
+
+
+    public void uploadImages(
+            Long postId,
+            List<MultipartFile> multipartFiles,
+            ImageUploadListener listener
+    )
+            throws PostNotFoundException, IOException {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+        List<Image> images = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            String name = FilesUtils.generateName();
+            String url = imageService.uploadImage(
+                    FilesUtils.convertToFile(multipartFile),
+                    name
+            );
+            Image image = Image.builder()
+                    .name(name)
+                    .url(url)
+                    .build();
+            imageRepository.save(image);
+            images.add(image);
+        }
+        post.setImages(images);
+        postRepository.save(post);
+        listener.onSuccess(true);
+    }
+
+
+    public void deleteImages(Long postId) throws PostNotFoundException {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+        imageRepository.deleteAll(post.getImages());
+    }
+
+    public void updateImages(
+            Long postId,
+            List<MultipartFile> multipartFiles,
+            final ImageUploadListener listener
+    ) throws PostNotFoundException {
+        if(!postRepository.existsById(postId)) {
+            listener.onSuccess(false);
+            return;
+        }
+        deleteImages(postId);
+        updateImages(postId, multipartFiles, listener);
+    }
+
 }
