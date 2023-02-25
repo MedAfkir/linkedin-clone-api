@@ -29,6 +29,7 @@ public class PostResponseDTO {
     private int likesCount;
     private int commentsCount;
     private List<LikeType> likeTypes;
+    private List<String> images;
     private Date createdAt;
     private Date updatedAt;
 }

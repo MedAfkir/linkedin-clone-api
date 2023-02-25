@@ -21,6 +21,7 @@ public class PostSimpleResponseDTO {
     private ClientSummaryDTO client;
     private int likesCount;
     private int commentsCount;
+    private List<String> images;
     private List<LikeType> likeTypes;
     private Date createdAt;
     private Date updatedAt;

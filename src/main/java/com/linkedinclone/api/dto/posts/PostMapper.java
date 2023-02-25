@@ -18,12 +18,14 @@ public interface PostMapper {
     @Mapping(target = "commentsCount",  expression = "java(post.getComments().size())")
     @Mapping(target = "friendComment", ignore = true)
     @Mapping(target = "likeTypes", ignore = true)
+    @Mapping(target = "images", ignore = true)
     PostResponseDTO toPostResponseDTO(Post post);
 
 
     @Mapping(target = "likesCount", expression = "java(post.getLikes().size())")
     @Mapping(target = "commentsCount",  expression = "java(post.getComments().size())")
     @Mapping(target = "likeTypes", ignore = true)
+    @Mapping(target = "images", ignore = true)
     PostSimpleResponseDTO toPostSimpleResponseDTO(Post post);
 
 

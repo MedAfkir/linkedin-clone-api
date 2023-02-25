@@ -199,6 +199,10 @@ public class PostService {
         List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
         for (Post post : posts) {
             PostResponseDTO postResponseDTO = postMapper.toPostResponseDTO(post);
+            if(post.getImages() != null) {
+                postResponseDTO.setImages(post.getImages()
+                        .stream().map(Image::getUrl).toList());
+            }
             postResponseDTO.setFriendComment(getFriendComment(post,
                     followings.stream()
                             .map(clientMapper::toClientSummaryDTO)
@@ -260,6 +264,10 @@ public class PostService {
                     PostSimpleResponseDTO responseDTO =
                             postMapper.toPostSimpleResponseDTO(post);
                     responseDTO.setLikeTypes(getSortedLikeTypes(post));
+                    if(post.getImages() != null) {
+                        responseDTO.setImages(post.getImages()
+                                .stream().map(Image::getUrl).toList());
+                    }
                     return responseDTO;
                 })
                 .toList();
