@@ -21,4 +21,12 @@ public interface PostMapper {
     PostResponseDTO toPostResponseDTO(Post post);
 
 
+    @Mapping(target = "likesCount", expression = "java(post.getLikes().size())")
+    @Mapping(target = "commentsCount",  expression = "java(post.getComments().size())")
+    @Mapping(target = "likeTypes", ignore = true)
+    PostSimpleResponseDTO toPostSimpleResponseDTO(Post post);
+
+
+
+
 }
