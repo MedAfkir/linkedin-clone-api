@@ -18,13 +18,11 @@ import com.linkedinclone.api.models.comments.*;
 import com.linkedinclone.api.models.skills.Skill;
 import com.linkedinclone.api.services.friendrequest.FriendRequestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +65,7 @@ public class PostService {
      * @throws PostNotFoundException Post not found
      * @throws ClientNotFoundException Client not found
      */
-    public PostDTO add(PostRequest request) throws PostNotFoundException, ClientNotFoundException {
+    public PostDTO createPost(PostRequest request) throws PostNotFoundException, ClientNotFoundException {
         Client client = clientRepository
                 .findById(request.clientId())
                 .orElseThrow(ClientNotFoundException::new);
@@ -204,7 +202,6 @@ public class PostService {
 
     }
 
-
     private List<LikeType> getSortedLikeTypes(Post post){
         Map<LikeType, Integer> likeCounts = new HashMap<>();
         for(PostLike like : post.getLikes()) {
@@ -219,7 +216,6 @@ public class PostService {
         }
         return sortedLikeTypes;
     }
-
 
     /**
      * get posts based on user's skills
