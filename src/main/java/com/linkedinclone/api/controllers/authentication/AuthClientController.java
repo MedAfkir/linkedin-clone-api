@@ -9,6 +9,7 @@ import com.linkedinclone.api.exceptions.alreadyused.UsernameAlreadyUsedException
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
 import com.linkedinclone.api.models.clients.Client;
 import com.linkedinclone.api.services.clients.ClientService;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -57,7 +58,12 @@ public class AuthClientController {
     public ResponseEntity<?> getAccessToken(
             @Valid @RequestBody TokenDTO tokenDTO
     ) throws ClientNotFoundException {
-        String username = jwtUtils.extractUsername(tokenDTO.getToken());
+        String username;
+        try {
+            username = jwtUtils.extractUsername(tokenDTO.getToken());
+        } catch(JwtException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Client client = clientService.findClientByUsername(username);
 
         if (!jwtUtils.validateToken(tokenDTO.getToken(), client))

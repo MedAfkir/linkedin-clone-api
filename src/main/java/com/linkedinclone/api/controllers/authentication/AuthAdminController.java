@@ -10,6 +10,7 @@ import com.linkedinclone.api.exceptions.alreadyused.UsernameAlreadyUsedException
 import com.linkedinclone.api.exceptions.notfound.AdminNotFoundException;
 import com.linkedinclone.api.models.admins.Admin;
 import com.linkedinclone.api.services.admins.AdminService;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,7 +60,13 @@ public class AuthAdminController {
     public ResponseEntity<?> getAccessToken(
             @Valid @RequestBody TokenDTO tokenDTO
     ) throws AdminNotFoundException {
-        String username = jwtUtils.extractUsername(tokenDTO.getToken());
+        String username;
+        try {
+            username = jwtUtils.extractUsername(tokenDTO.getToken());
+        } catch(JwtException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Admin admin = adminService.findAdminByUsername(username);
 
         if (!jwtUtils.validateToken(tokenDTO.getToken(), admin))
