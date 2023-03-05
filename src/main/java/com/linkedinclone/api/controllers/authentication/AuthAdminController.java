@@ -2,6 +2,7 @@ package com.linkedinclone.api.controllers.authentication;
 
 import com.linkedinclone.api.config.JwtUtils;
 import com.linkedinclone.api.dto.auth.LoginResponse;
+import com.linkedinclone.api.dto.auth.TokenDTO;
 import com.linkedinclone.api.dto.users.UserLoginRequest;
 import com.linkedinclone.api.dto.users.UserRegistrationRequest;
 import com.linkedinclone.api.exceptions.alreadyused.EmailAlreadyUsedException;
@@ -11,13 +12,11 @@ import com.linkedinclone.api.models.admins.Admin;
 import com.linkedinclone.api.services.admins.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/auth/admin")
@@ -51,6 +50,23 @@ public class AuthAdminController {
                 .builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/access-token")
+    public ResponseEntity<?> getAccessToken(
+            @Valid @RequestBody TokenDTO tokenDTO
+    ) throws AdminNotFoundException {
+        String username = jwtUtils.extractUsername(tokenDTO.getToken());
+        Admin admin = adminService.findAdminByUsername(username);
+
+        if (!jwtUtils.validateToken(tokenDTO.getToken(), admin))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        TokenDTO response = TokenDTO.builder()
+                .token(jwtUtils.generateAccessToken(admin))
                 .build();
 
         return ResponseEntity.ok(response);
