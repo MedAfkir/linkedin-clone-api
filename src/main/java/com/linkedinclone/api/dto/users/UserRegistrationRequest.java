@@ -24,7 +24,7 @@ public class UserRegistrationRequest {
     private String lastname;
 
     @NotBlank
-    @Pattern(regexp = "/^[a-zA-Z0-9]+$/", message = "Username invalid")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Username invalid")
     @Size(min = 5, max = 100, message = "Username size should be between {min} & {max}")
     private String username;
 
@@ -40,7 +40,7 @@ public class UserRegistrationRequest {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "/^(\\d{10}|\\+\\d{1,3}\\d{9})$/\n", message = "Phone number invalid")
+    @Pattern(regexp = "^(\\d{10}|\\+\\d{1,3}\\d{9})$", message = "Phone number invalid")
     private String phoneNumber;
 
 }
