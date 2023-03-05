@@ -26,6 +26,6 @@ public abstract class Notification<T, S extends ActionType> implements Notificat
     private Date updatedAt;
 
     @OneToMany(mappedBy = "notification")
-    private List<UserNotificationState> userNotificationStates;
+    private List<NotificationTarget> notificationTargets;
 
 }

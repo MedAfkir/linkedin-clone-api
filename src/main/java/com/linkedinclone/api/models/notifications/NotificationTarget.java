@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserNotificationState {
+public class NotificationTarget {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
