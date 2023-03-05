@@ -28,8 +28,9 @@ public class AuthClientController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegistrationRequest request)
-            throws EmailAlreadyUsedException, UsernameAlreadyUsedException {
+    public ResponseEntity<?> register(
+            @Valid @RequestBody UserRegistrationRequest request
+    ) throws EmailAlreadyUsedException, UsernameAlreadyUsedException {
         return ResponseEntity.ok(clientService.addClient(request));
     }
 
