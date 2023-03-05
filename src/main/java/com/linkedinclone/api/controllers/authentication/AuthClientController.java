@@ -8,6 +8,7 @@ import com.linkedinclone.api.exceptions.alreadyused.UsernameAlreadyUsedException
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
 import com.linkedinclone.api.models.clients.Client;
 import com.linkedinclone.api.services.clients.ClientService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,12 +34,14 @@ public class AuthClientController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest request) throws ClientNotFoundException {
+    public ResponseEntity<?> login(
+            @Valid @RequestBody UserLoginRequest request
+    ) throws ClientNotFoundException {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.username(), request.password())
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        final Client client = clientService.findClientByUsername(request.username());
+        final Client client = clientService.findClientByUsername(request.getUsername());
         final String token = jwtUtils.generateAccessToken(client);
         final String refreshToken = jwtUtils.generateRefreshToken(client);
 

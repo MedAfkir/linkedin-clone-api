@@ -9,6 +9,7 @@ import com.linkedinclone.api.exceptions.alreadyused.UsernameAlreadyUsedException
 import com.linkedinclone.api.exceptions.notfound.AdminNotFoundException;
 import com.linkedinclone.api.models.admins.Admin;
 import com.linkedinclone.api.services.admins.AdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,12 +35,14 @@ public class AuthAdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest request) throws AdminNotFoundException {
+    public ResponseEntity<?> login(
+            @Valid @RequestBody UserLoginRequest request
+    ) throws AdminNotFoundException {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.username(), request.password())
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        Admin admin = adminService.findAdminByUsername(request.username());
+        Admin admin = adminService.findAdminByUsername(request.getUsername());
         final String accessToken = jwtUtils.generateAccessToken(admin);
         final String refreshToken = jwtUtils.generateRefreshToken(admin);
 

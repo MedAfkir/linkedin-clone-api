@@ -1,6 +1,5 @@
 package com.linkedinclone.api.dto.users;
 
-import com.linkedinclone.api.models.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
