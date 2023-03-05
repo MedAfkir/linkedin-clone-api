@@ -25,6 +25,6 @@ public class NotificationTarget {
     private User user;
 
     @Column
-    private boolean read;
+    private boolean readed;
 
 }
