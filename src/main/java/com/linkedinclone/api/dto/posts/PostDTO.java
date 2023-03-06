@@ -2,7 +2,6 @@ package com.linkedinclone.api.dto.posts;
 
 import com.linkedinclone.api.dto.clients.ClientSummaryDTO;
 import com.linkedinclone.api.dto.comments.CommentDTO;
-import com.linkedinclone.api.models.posts.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
