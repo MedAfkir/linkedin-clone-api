@@ -1,6 +1,5 @@
 package com.linkedinclone.api.dto.experiences;
 
-import com.linkedinclone.api.models.experiences.Experience;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,6 +13,8 @@ public class ExperienceDTO {
     private String companyName;
     private String description;
     private Long clientId;
+    private Date startDate;
+    private Date endDate;
     private Date createdAt;
     private Date updatedAt;
 }
