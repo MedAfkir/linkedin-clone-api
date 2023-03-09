@@ -6,6 +6,7 @@ import com.linkedinclone.api.dto.skills.SkillDTO;
 import com.linkedinclone.api.dto.skills.SkillUpdateRequest;
 import com.linkedinclone.api.exceptions.notfound.SkillNotFoundException;
 import com.linkedinclone.api.services.skills.SkillService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +35,16 @@ public class SkillController {
     }
 
     @PostMapping
-    public ResponseEntity<SkillDTO> addSkill(@RequestBody SkillAddRequest request) {
+    public ResponseEntity<SkillDTO> addSkill(
+            @Valid @RequestBody SkillAddRequest request
+    ) {
         return ResponseEntity.ok(skillService.addSkill(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SkillDTO> updateSkill(
             @PathVariable(name = "id") Long id,
-            @RequestBody SkillUpdateRequest request
+            @Valid @RequestBody SkillUpdateRequest request
     ) throws SkillNotFoundException {
         SkillDTO skillDTO = skillService.updateById(id, request);
         return ResponseEntity.ok(skillDTO);

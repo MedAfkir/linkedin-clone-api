@@ -1,12 +1,17 @@
 package com.linkedinclone.api.dto.skills;
 
-import com.linkedinclone.api.models.skills.Skill;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class SkillUpdateRequest {
+    @NotBlank
     private String label;
+    @NotBlank
     private String description;
 }
