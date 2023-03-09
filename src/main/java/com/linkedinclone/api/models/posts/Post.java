@@ -8,8 +8,8 @@ import com.linkedinclone.api.models.likes.post.PostLike;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -37,11 +37,11 @@ public class Post {
     private Client client;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Collection<Comment> comments;
+    private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Collection<PostLike> likes;
+    private List<PostLike> likes;
 
     @OneToMany
-    private Collection<Image> images;
+    private List<Image> images;
 }

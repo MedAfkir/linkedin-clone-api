@@ -113,10 +113,10 @@ public class AdminService {
             throws AdminNotFoundException, InvalidBodyRequestException {
         Admin admin = findAdminById(id);
 
-        if (!Role.getAdminRoles().contains(request.role()))
+        if (!Role.getAdminRoles().contains(request.getRole()))
             throw new InvalidBodyRequestException("Invalid Admin Role");
 
-        admin.setRole(request.role());
+        admin.setRole(request.getRole());
         adminRepository.save(admin);
     }
 

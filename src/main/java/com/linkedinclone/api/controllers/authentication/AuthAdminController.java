@@ -57,7 +57,7 @@ public class AuthAdminController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/access-token")
+    @PostMapping("/access-token")
     public ResponseEntity<?> getAccessToken(
             @Valid @RequestBody TokenDTO tokenDTO
     ) throws AdminNotFoundException {

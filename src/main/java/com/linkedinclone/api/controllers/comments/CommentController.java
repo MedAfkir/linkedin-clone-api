@@ -12,8 +12,8 @@ import com.linkedinclone.api.exceptions.notfound.LikeNotFoundException;
 import com.linkedinclone.api.exceptions.notfound.NotFoundException;
 import com.linkedinclone.api.services.likes.CommentLikeService;
 import com.linkedinclone.api.services.comments.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +39,9 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> updateComment(@RequestBody CommentRequest request) throws NotFoundException {
+    public ResponseEntity<?> createComment(
+            @Valid @RequestBody CommentRequest request
+    ) throws NotFoundException {
         return ResponseEntity.ok(commentService.addComment(request));
     }
 
@@ -66,7 +68,6 @@ public class CommentController {
     public ResponseEntity<PostDTO> getCommentPost(@PathVariable("id") Long id) throws NotFoundException {
         return ResponseEntity.ok(commentService.getCommentPost(id));
     }
-
 
     /**
      * @author adil

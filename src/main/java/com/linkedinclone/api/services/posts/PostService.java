@@ -28,7 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -53,11 +52,7 @@ public class PostService {
     private final ImageRepository imageRepository;
 
     public List<PostSummaryDTO> getAll() {
-        return postRepository
-                .findAll()
-                .stream()
-                .map(postMapper::toPostSummaryDTO)
-                .toList();
+        return postMapper.toPostSummaryDTO(postRepository.findAll());
     }
 
     /**
@@ -81,11 +76,11 @@ public class PostService {
      */
     public PostDTO createPost(PostRequest request) throws PostNotFoundException, ClientNotFoundException {
         Client client = clientRepository
-                .findById(request.clientId())
+                .findById(request.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
         Post post = new Post();
         post.setClient(client);
-        post.setContent(request.content());
+        post.setContent(request.getContent());
         Date creationDate = new Date();
         post.setCreatedAt(creationDate);
         post.setUpdatedAt(creationDate);
@@ -104,14 +99,14 @@ public class PostService {
     public PostDTO updatePost(Long id, PostRequest request) throws PostNotFoundException, ClientNotFoundException {
         Post post = findPostById(id);
 
-        if (!post.getClient().getId().equals(request.clientId())) {
+        if (!post.getClient().getId().equals(request.getClientId())) {
             Client client = clientRepository
-                    .findById(request.clientId())
+                    .findById(request.getClientId())
                     .orElseThrow(ClientNotFoundException::new);
             post.setClient(client);
         }
 
-        post.setContent(request.content());
+        post.setContent(request.getContent());
         post.setUpdatedAt(new Date());
         return postMapper.toPostDTO(postRepository.save(post));
     }

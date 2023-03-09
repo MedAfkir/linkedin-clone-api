@@ -50,9 +50,6 @@ public class PositionService {
      */
     public PositionDTO addPosition(PositionRequest request) {
         Position position = positionMapper.createPosition(request);
-        Date createdDate = new Date();
-        position.setCreatedAt(createdDate);
-        position.setUpdatedAt(createdDate);
         return positionMapper.toPositionDTO(positionRepository.save(position));
     }
 

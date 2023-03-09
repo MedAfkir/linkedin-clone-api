@@ -4,6 +4,7 @@ import com.linkedinclone.api.dto.clients.ClientDTO;
 import com.linkedinclone.api.dto.clients.ClientSummaryDTO;
 import com.linkedinclone.api.dto.requests.RequestCreateDTO;
 import com.linkedinclone.api.dto.requests.RequestUpdateDTO;
+import com.linkedinclone.api.dto.users.UserUpdateRequest;
 import com.linkedinclone.api.exceptions.alreadyused.RequestAlreadyAcceptedException;
 import com.linkedinclone.api.exceptions.alreadyused.RequestAlreadySentException;
 import com.linkedinclone.api.exceptions.notfound.ClientNotFoundException;
@@ -14,6 +15,7 @@ import com.linkedinclone.api.models.requests.RequestState;
 import com.linkedinclone.api.services.clients.ClientService;
 import com.linkedinclone.api.services.friendrequest.FriendRequestService;
 import com.linkedinclone.api.services.posts.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(
             @PathVariable("id") Long id,
-            @RequestBody ClientDTO clientDTO
+            @Valid @RequestBody UserUpdateRequest request
     ) {
         return null; // TODO
     }
@@ -115,48 +117,6 @@ public class ClientController {
     public ResponseEntity<?> getPendingRequests(@PathVariable("id") Long id)
             throws ClientNotFoundException {
         return ResponseEntity.ok(friendRequestService.getSentRequests(id));
-    }
-
-    /**
-     * send friend request to a user (request body contains id of the sender and the id
-     * of the receiver
-     *
-     * @param request
-     * @return
-     * @throws ClientNotFoundException
-     * @throws RequestAlreadySentException
-     */
-    @PostMapping("/request")
-    public ResponseEntity<?> createRequest(@RequestBody RequestCreateDTO request)
-            throws ClientNotFoundException, RequestAlreadySentException {
-        return ResponseEntity.ok(friendRequestService.createRequest(request));
-    }
-
-    /**
-     * Update the Friend Request {@link RequestState State}
-     *
-     * @param requestDTO
-     * @return
-     * @throws RequestAlreadyAcceptedException
-     * @throws RequestNotFoundException
-     */
-    @PutMapping("/request")
-    public ResponseEntity<?> updateRequest(@RequestBody RequestUpdateDTO requestDTO)
-            throws RequestNotFoundException {
-        return ResponseEntity.ok(friendRequestService.updateRequest(requestDTO));
-    }
-
-    /**
-     * remove friend request
-     *
-     * @param id ID of User invited to become (or already) a friend
-     * @return
-     * @throws RequestNotFoundException Friend Request Not Found
-     */
-    @DeleteMapping("/request/{id}")
-    public ResponseEntity<?> removeRequest(@PathVariable("id") Long id)
-            throws RequestNotFoundException {
-        return ResponseEntity.ok(friendRequestService.removeRequest(id));
     }
 
     @GetMapping("/{clientId}/followings/posts")

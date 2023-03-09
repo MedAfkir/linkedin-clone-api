@@ -40,18 +40,16 @@ public class CommentService {
 
     /**
      * Get all comments
+     *
      * @return List of comments
      */
     public List<CommentSummaryDTO> getAllComments() {
-        return commentRepository
-                .findAll()
-                .stream()
-                .map(commentMapper::toCommentSummaryDTO)
-                .toList();
+        return commentMapper.toCommentSummaryDTO(commentRepository.findAll());
     }
 
     /**
      * Get Comment by its ID
+     *
      * @param id Id of the comemnt that will be retrieved
      * @return Comment
      * @throws CommentNotFoundException Comment Not Found
@@ -62,22 +60,23 @@ public class CommentService {
 
     /**
      * Add new comment
+     *
      * @param request Comment Request Body
      * @return Comment added
-     * @throws PostNotFoundException Post Not Found
+     * @throws PostNotFoundException   Post Not Found
      * @throws ClientNotFoundException Client Not Found
      */
     public CommentDTO addComment(CommentRequest request)
             throws ClientNotFoundException, PostNotFoundException {
-        Client client = clientRepository.findById(request.clientId())
+        Client client = clientRepository.findById(request.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
 
-        Post post = postRepository.findById(request.postId())
+        Post post = postRepository.findById(request.getPostId())
                 .orElseThrow(PostNotFoundException::new);
 
         Date creationDate = new Date();
         Comment comment = Comment.builder()
-                .content(request.content())
+                .content(request.getContent())
                 .createdAt(creationDate)
                 .updatedAt(creationDate)
                 .client(client)
@@ -88,32 +87,33 @@ public class CommentService {
 
     /**
      * Update Comment By its id
-     * @param id Id of the comment that will be updated
+     *
+     * @param id      Id of the comment that will be updated
      * @param request Comemnt Request Body
      * @return Comment updated
-     * @throws PostNotFoundException Post Not Found
-     * @throws ClientNotFoundException Client Not Found
+     * @throws PostNotFoundException    Post Not Found
+     * @throws ClientNotFoundException  Client Not Found
      * @throws CommentNotFoundException Comment Client Not Found
      */
     public CommentDTO updateComment(Long id, CommentRequest request)
             throws CommentNotFoundException, ClientNotFoundException, PostNotFoundException {
         Comment comment = findCommentById(id);
 
-        if (request.clientId().equals(comment.getClient().getId())) {
+        if (!request.getClientId().equals(comment.getClient().getId())) {
             Client client = clientRepository
-                    .findById(request.clientId())
+                    .findById(request.getClientId())
                     .orElseThrow(ClientNotFoundException::new);
             comment.setClient(client);
         }
 
-        if (request.postId().equals(comment.getPost().getId())) {
+        if (!request.getPostId().equals(comment.getPost().getId())) {
             Post post = postRepository
-                    .findById(request.postId())
+                    .findById(request.getPostId())
                     .orElseThrow(PostNotFoundException::new);
             comment.setPost(post);
         }
 
-        comment.setContent(request.content());
+        comment.setContent(request.getContent());
         return commentMapper.toCommentDTO(commentRepository.save(comment));
     }
 
@@ -124,6 +124,7 @@ public class CommentService {
 
     /**
      * Get Comment Writer ({@link Client})
+     *
      * @param id Id of the comment whose writer will be retrieved
      * @return Comment Writer
      * @throws CommentNotFoundException Comment Not Found
@@ -135,6 +136,7 @@ public class CommentService {
 
     /**
      * Get Comment Post
+     *
      * @param id Id of the comment whose post will be retrieved
      * @return Comment's Post
      * @throws CommentNotFoundException Comment Not Found
@@ -154,10 +156,10 @@ public class CommentService {
     }
 
     /**
-     * @author adil
      * @param commentId
      * @return
      * @throws CommentNotFoundException
+     * @author adil
      */
     public List<CommentLikeResponseDTO> getAllLikesForComment(Long commentId)
             throws CommentNotFoundException {

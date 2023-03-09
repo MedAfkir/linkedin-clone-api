@@ -3,6 +3,7 @@ package com.linkedinclone.api.controllers.experiences;
 import com.linkedinclone.api.dto.experiences.ExperienceRequest;
 import com.linkedinclone.api.exceptions.notfound.NotFoundException;
 import com.linkedinclone.api.services.experiences.ExperienceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,17 @@ public class ExperienceController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addExperience(@RequestBody ExperienceRequest request) throws NotFoundException {
+    public ResponseEntity<?> addExperience(
+            @Valid @RequestBody ExperienceRequest request
+    ) throws NotFoundException {
         return ResponseEntity.ok(experienceService.addExperience(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateExperience(@PathVariable("id") Long id, @RequestBody ExperienceRequest request) throws NotFoundException {
+    public ResponseEntity<?> updateExperience(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody ExperienceRequest request
+    ) throws NotFoundException {
         return ResponseEntity.ok(experienceService.updateExperience(id, request));
     }
 

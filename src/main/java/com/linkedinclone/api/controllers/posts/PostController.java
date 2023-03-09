@@ -10,6 +10,7 @@ import com.linkedinclone.api.exceptions.notfound.LikeNotFoundException;
 import com.linkedinclone.api.exceptions.notfound.PostNotFoundException;
 import com.linkedinclone.api.services.likes.PostLikeService;
 import com.linkedinclone.api.services.posts.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<?> addPost(
-            @RequestBody PostRequest request
+            @Valid @RequestBody PostRequest request
     ) throws ClientNotFoundException, PostNotFoundException {
         return ResponseEntity.ok(postService.createPost(request));
     }
@@ -46,7 +47,7 @@ public class PostController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePost(
             @PathVariable("id") Long id,
-            @RequestBody PostRequest request
+            @Valid @RequestBody PostRequest request
     ) throws ClientNotFoundException, PostNotFoundException {
         return ResponseEntity.ok(postService.updatePost(id, request));
     }

@@ -25,11 +25,7 @@ public class ExperienceService {
     private final ClientMapper clientMapper;
 
     public List<ExperienceDTO> getAllExperiences() {
-        return experienceRespository
-                .findAll()
-                .stream()
-                .map(experienceMapper::toExperienceDTO)
-                .collect(Collectors.toList());
+        return experienceMapper.toExperienceDTO(experienceRespository.findAll());
     }
 
     public ExperienceWithClientDTO getExperienceById(Long id) throws ExperienceNotFoundException {
@@ -39,56 +35,45 @@ public class ExperienceService {
 
     /**
      * Add experience
+     *
      * @param request Experience Request Body
      * @return Experience added
      * @throws ClientNotFoundException Client Not Found
      */
     public ExperienceWithClientDTO addExperience(ExperienceRequest request) throws ClientNotFoundException {
-        Client client = clientRepository
-                .findById(request.clientId())
+        Client client = clientRepository.findById(request.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
-        Experience experience = new Experience();
+        Experience experience = experienceMapper.createExperience(request);
         experience.setClient(client);
-        experience.setCompanyName(request.companyName());
-        experience.setJobTitle(request.jobTitle());
-        experience.setDescription(request.description());
-        experience.setStartDate(request.startDate());
-        experience.setEndDate(request.endDate());
-        Date creationDate = new Date();
-        experience.setCreatedAt(creationDate);
-        experience.setUpdatedAt(creationDate);
         return experienceMapper.toExperienceWithClientDTO(experience);
     }
 
     /**
      * Update an experience by its ID
-     * @param id Id of experience that will be updated
+     *
+     * @param id      ID of experience that will be updated
      * @param request Experience Request Body
      * @return Experience updated
-     * @throws ClientNotFoundException Client Not Found
+     * @throws ClientNotFoundException     Client Not Found
      * @throws ExperienceNotFoundException Experience Not Found
      */
     public ExperienceWithClientDTO updateExperience(Long id, ExperienceRequest request) throws ExperienceNotFoundException, ClientNotFoundException {
         Experience experience = findExperienceById(id);
 
-        if (!experience.getClient().getId().equals(request.clientId())) {
+        if (!experience.getClient().getId().equals(request.getClientId())) {
             Client client = clientRepository
-                    .findById(request.clientId())
+                    .findById(request.getClientId())
                     .orElseThrow(ClientNotFoundException::new);
             experience.setClient(client);
         }
 
-        experience.setCompanyName(request.companyName());
-        experience.setJobTitle(request.jobTitle());
-        experience.setDescription(request.description());
-        experience.setUpdatedAt(new Date());
-        experience.setStartDate(request.startDate());
-        experience.setEndDate(request.endDate());
+        experience = experienceMapper.updateExperience(request, experience);
         return experienceMapper.toExperienceWithClientDTO(experienceRespository.save(experience));
     }
 
     /**
      * Delete Experience
+     *
      * @param id Id of experience that will be deleted
      * @throws ExperienceNotFoundException Experience Not Found
      */
@@ -99,6 +84,7 @@ public class ExperienceService {
 
     /**
      * Get the owner of an experience
+     *
      * @param id Id of experience whose client will be fetched
      * @return Experience Owner
      * @throws ExperienceNotFoundException Experience Not Found
