@@ -49,7 +49,7 @@ public class PositionService {
      * @return Added Position
      */
     public PositionDTO addPosition(PositionRequest request) {
-        Position position = request.toPosition();
+        Position position = positionMapper.createPosition(request);
         Date createdDate = new Date();
         position.setCreatedAt(createdDate);
         position.setUpdatedAt(createdDate);

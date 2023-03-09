@@ -5,6 +5,7 @@ import com.linkedinclone.api.dto.positions.PositionDTO;
 import com.linkedinclone.api.dto.positions.PositionRequest;
 import com.linkedinclone.api.exceptions.notfound.PositionNotFoundException;
 import com.linkedinclone.api.services.positions.PositionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,9 @@ public class PositionController {
     }
 
     @PostMapping
-    public ResponseEntity<PositionDTO> addPosition(@RequestBody PositionRequest request) {
+    public ResponseEntity<PositionDTO> addPosition(
+            @Valid @RequestBody PositionRequest request
+    ) {
         return ResponseEntity.ok(positionService.addPosition(request));
     }
 
