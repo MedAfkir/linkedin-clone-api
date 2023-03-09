@@ -1,6 +1,5 @@
 package com.linkedinclone.api.dto.positions;
 
-import com.linkedinclone.api.models.positions.Position;
 import lombok.*;
 
 import java.util.Date;

@@ -3,8 +3,9 @@ package com.linkedinclone.api.dto.requests;
 import com.linkedinclone.api.models.requests.Request;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RequestMapper {
 
     @Mapping(source = "sender.id", target = "sender.id")

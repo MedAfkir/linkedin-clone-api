@@ -1,17 +1,30 @@
 package com.linkedinclone.api.dto.experiences;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-public record ExperienceRequest(
-        String jobTitle,
-        String companyName,
-        String description,
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExperienceRequest {
+        @NotBlank
+        private String jobTitle;
+        @NotBlank
+        private String companyName;
+        @NotBlank
+        private String description;
+        @NotNull
         @JsonFormat(pattern = "yyyy-MM-dd")
-        Date startDate,
+        private Date startDate;
+        @NotNull
         @JsonFormat(pattern = "yyyy-MM-dd")
-        Date endDate,
-        Long clientId
-) {
+        private Date endDate;
+        @NotNull
+        private Long clientId;
 }

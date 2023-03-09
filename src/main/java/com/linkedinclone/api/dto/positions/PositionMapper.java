@@ -10,6 +10,7 @@ import org.mapstruct.ReportingPolicy;
 public interface PositionMapper {
     PositionDTO toPositionDTO(Position position);
 
+    @Mapping(target = "updatedAt", expression = "java(new java.util.Date())")
     Position updatePosition(PositionRequest request, @MappingTarget Position position);
 
     @Mapping(target = "createdAt", expression = "java(new java.util.Date())")
